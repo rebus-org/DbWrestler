@@ -13,13 +13,13 @@ namespace DbWrestler.Tests
         {
             var localDb = new LocalDb();
 
-            var instance = localDb.GetInstance();
+            var instance = localDb.GetInstance(instanceName: "MSSQLLocalDB");
 
             instance.CreateIfNotExists();
 
             instance.GetDatabaseNames().Select(name => new {DatabaseName = name}).DumpTable();
 
-            var database = instance.GetDatabase("test_db");
+            var database = instance.GetDatabase(databaseName: "test_db");
 
             database.CreateIfNotExists();
 
