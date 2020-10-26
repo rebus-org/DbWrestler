@@ -29,6 +29,8 @@ namespace DbWrestler
 
         public void Delete() => Execute($"delete \"{_instanceName}\"");
 
+        public DbInstance GetDatabase(string databaseName) => new DbInstance(_instanceName, databaseName);
+
         public bool Exists
         {
             get
@@ -43,5 +45,14 @@ namespace DbWrestler
         IReadOnlyList<string> Execute(string command) => Shell.Execute(_exePath, command, _commandTimeoutSeconds);
 
         public override string ToString() => $"LOCALDB: \"{_instanceName}\"";
+
+        public IReadOnlyList<string> GetDatabaseNames()
+        {
+            using var connection = new ConnHelper(_instanceName).OpenConnection("master");
+
+            var names = connection.Query("select [name] from [sys].[databases]").ToList();
+
+            return names;
+        }
     }
 }

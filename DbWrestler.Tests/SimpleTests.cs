@@ -20,7 +20,7 @@ namespace DbWrestler.Tests
         {
             var instance = new LocalDb();
 
-            var localDbDatabase = instance.GetDatabase(Guid.NewGuid().ToString("N"));
+            var localDbDatabase = instance.GetInstance(Guid.NewGuid().ToString("N"));
 
             Assert.That(localDbDatabase.Exists, Is.False);
         }
@@ -30,7 +30,7 @@ namespace DbWrestler.Tests
         {
             var instance = new LocalDb();
 
-            var localDbDatabase = instance.GetDatabase(Guid.NewGuid().ToString("N"));
+            var localDbDatabase = instance.GetInstance(Guid.NewGuid().ToString("N"));
 
             var existsBeforeAnything = localDbDatabase.Exists;
 

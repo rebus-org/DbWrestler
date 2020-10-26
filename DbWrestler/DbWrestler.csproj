@@ -5,4 +5,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="microsoft.data.sqlclient" Version="2.0.1" />
+  </ItemGroup>
+
 </Project>

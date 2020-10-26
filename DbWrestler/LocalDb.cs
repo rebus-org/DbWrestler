@@ -19,7 +19,7 @@ namespace DbWrestler
             _exePath = GetLocalDbExecutablePath();
         }
 
-        public LocalDbInstance GetDatabase(string instanceName = DefaultInstanceName) => new LocalDbInstance(instanceName, _exePath, _commandTimeoutSeconds);
+        public LocalDbInstance GetInstance(string instanceName = DefaultInstanceName) => new LocalDbInstance(instanceName, _exePath, _commandTimeoutSeconds);
 
         public IReadOnlyList<string> GetInstanceNames()
         {
