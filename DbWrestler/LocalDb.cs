@@ -19,7 +19,7 @@ namespace DbWrestler
             _exePath = GetLocalDbExecutablePath();
         }
 
-        public LocalDbInstance GetInstance(string instanceName = DefaultInstanceName) => new LocalDbInstance(instanceName, _exePath, _commandTimeoutSeconds);
+        public LocalDbInstance GetInstance(string instanceName = DefaultInstanceName) => new(instanceName, _exePath, _commandTimeoutSeconds);
 
         public IReadOnlyList<string> GetInstanceNames()
         {
@@ -33,20 +33,27 @@ namespace DbWrestler
         {
             // C:\Program Files\Microsoft SQL Server\130\Tools\Binn
 
-            var directory = Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Microsoft SQL Server\130\Tools\Binn");
-
-            var exePath = Path.Combine(directory, "SqlLocalDB.exe");
-
-            if (!File.Exists(exePath))
+            var directories = new[]
             {
-                throw new InvalidOperationException($@"Could not find SQL Local DB executable here:
+                Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Microsoft SQL Server\130\Tools\Binn")
+            };
 
-    {exePath}
+            foreach (var directory in directories)
+            {
+                var exePath = Path.Combine(directory, "SqlLocalDB.exe");
 
-Is LocalDB even installed on this machine? ({Environment.MachineName})");
+                if (File.Exists(exePath)) return exePath;
             }
 
-            return exePath;
+            throw new InvalidOperationException($@"Could not find SQL Local DB executable - looked for:
+
+    SqlLocalDB.exe
+
+in these locations:
+
+{string.Join(Environment.NewLine, directories.Select(d => $"    {d}"))}
+
+Is LocalDB installed on this machine? ({Environment.MachineName})");
         }
     }
 }

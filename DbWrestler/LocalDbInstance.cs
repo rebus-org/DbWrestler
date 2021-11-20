@@ -29,7 +29,7 @@ namespace DbWrestler
 
         public void Delete() => Execute($"delete \"{_instanceName}\"");
 
-        public DbInstance GetDatabase(string databaseName) => new DbInstance(_instanceName, databaseName);
+        public DbInstance GetDatabase(string databaseName) => new(_instanceName, databaseName);
 
         public bool Exists
         {

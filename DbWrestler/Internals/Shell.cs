@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,22 +19,24 @@ namespace DbWrestler.Internals
 
                     UseShellExecute = false,
                     CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+
                     RedirectStandardOutput = true,
-                    RedirectStandardError = true
+                    RedirectStandardError = true,
                 }
             };
 
-            var outputLines = new List<string>();
+            var outputLines = new ConcurrentQueue<string>();
 
             void AppendLine(string text, string prefix = null)
             {
                 if (string.IsNullOrWhiteSpace(text)) return;
 
-                outputLines.Add(prefix == null ? text : $"{prefix}: {text}");
+                outputLines.Enqueue(prefix == null ? text : $"{prefix}: {text}");
             }
 
-            process.OutputDataReceived += (o, ea) => AppendLine(ea.Data);
-            process.ErrorDataReceived += (o, ea) => AppendLine(ea.Data, "ERROR");
+            process.OutputDataReceived += (_, ea) => AppendLine(ea.Data);
+            process.ErrorDataReceived += (_, ea) => AppendLine(ea.Data, "ERROR");
 
             if (!process.Start())
             {
@@ -53,6 +56,8 @@ Captured output:
 
             if (!process.WaitForExit((int)TimeSpan.FromSeconds(commandTimeoutSeconds).TotalMilliseconds))
             {
+                process.Kill();
+
                 throw new TimeoutException($@"Command
 
     {fileName} {arguments}
@@ -77,8 +82,7 @@ Captured output:
 {string.Join(Environment.NewLine, outputLines)}");
             }
 
-            return outputLines.Where(line => line != null).ToList();
+            return outputLines.ToList();
         }
-
     }
 }

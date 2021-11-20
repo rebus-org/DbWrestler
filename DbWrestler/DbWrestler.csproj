@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.data.sqlclient" Version="2.0.1" />
+    <PackageReference Include="microsoft.data.sqlclient" Version="4.0.0" />
   </ItemGroup>
 
 </Project>
