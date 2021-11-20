@@ -35,7 +35,8 @@ namespace DbWrestler
 
             var directories = new[]
             {
-                Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Microsoft SQL Server\130\Tools\Binn")
+                Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Microsoft SQL Server\150\Tools\Binn"),
+                Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Microsoft SQL Server\130\Tools\Binn"),
             };
 
             foreach (var directory in directories)
