@@ -10,3 +10,6 @@
 ## 0.0.3
 * Add additional probe path for SQL Local DB executable
 * Update dependencies
+
+## 0.0.4
+* Nicen up NuGet package
